@@ -30,6 +30,7 @@ var userSchema = new Schema({
             id: {type: String, required: true},
             type: {type: String, required: true},
             content: {type: String, required: true},
+            posted_by: {type: String, required: true},
             comments: {
                 type: [{
                     commented_by: {type: String, required: true},

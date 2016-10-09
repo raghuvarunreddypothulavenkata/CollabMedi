@@ -1,0 +1,6 @@
+{
+  "host"     : "collabmedi.cqnxcghxjowy.us-east-1.rds.amazonaws.com",
+  "user"     : "collabmedi",
+  "password" : "collabmedi",
+  "database" : "collabmedi"
+}

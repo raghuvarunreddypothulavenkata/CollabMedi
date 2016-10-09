@@ -27,9 +27,8 @@ module.exports.create = function (req, res) {
   });
 
   group.save(function (err) {
-    res.status(201).send();
+    res.status(201).send({ message: 'Group created!' });
   })
-
 }
 
 
@@ -42,15 +41,15 @@ module.exports.createPost = function (req, res) {
     id: new ObjectId(),
     content: req.body.content,
     type: req.body.type,
+    posted_by: req.body.posted_by,
     date: new Date().getTime()
   }
   Groups.findById(groupId, function (err, resp) {
     resp.posts.push(post);
     Groups.findByIdAndUpdate(groupId, resp, function (err, docs) {
-      res.status(204).send();
+      res.status(204).send(resp);
     })
   });
-
 }
 
 
@@ -80,27 +79,27 @@ module.exports.putComment = function (req, res) {
 
     });
     Groups.findByIdAndUpdate(resp._id, resp, function (err, docs) {
-      res.status(204).send();
+      res.status(204).send(resp);
     })
   });
 
 }
 
 
-// newsfeed of groups
+// group details
 module.exports.getAll = function (req, res) {
   var groupId = req.params.groupid;
   Groups.findById(groupId, function (err, resp) {
-    var posts = resp.posts;
-    posts.reverse();
-    res.status(200).json(posts);
-
+    if(!resp.posts.isEmpty) {
+      var posts = resp.posts;
+      posts.reverse();
+    }
+    res.status(200).json(resp);
   });
 }
 
 
 // join group
-
 module.exports.joinGroup = function (req, res) {
 
   var groupId = req.params.groupid;
@@ -117,14 +116,20 @@ module.exports.joinGroup = function (req, res) {
 
 
 // join group
-
 module.exports.getMembers = function (req, res) {
 
   var groupId = req.params.groupid;
 
   Groups.findById(groupId
     , function (err, resp) {
-      console.log(resp)
       res.status(200).json(resp.members);
     });
+}
+
+module.exports.getAllGroups = function (req,res) {
+  Groups.find({},function (err, groups) {
+    if (err)
+      res.send(err);
+    res.status(200).json(groups);
+  });
 }

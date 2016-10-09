@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="st-layout ls-top-navbar ls-bottom-footer show-sidebar sidebar-l2" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>CollabMedi | Newsfeed</title>
+  <link href="css/vendor/all.css" rel="stylesheet">
+  <link href="css/app/app.css" rel="stylesheet">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!-- If you don't need support for Internet Explorer <= 8 you can safely remove these -->
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+
+  <!-- Wrapper required for sidebar transitions -->
+  <div class="st-container">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-main navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a ng-click="menuCollapsed = !menuCollapsed" href="" data-effect="st-effect-1" class="toggle pull-left visible-xs"><i class="fa fa-bars"></i></a>
+          <button type="button" class="navbar-toggle" ng-click="navCollapsed = !navCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!--<a ng-click="chatCollapsed = !chatCollapsed" href="" data-effect="st-effect-1" class="toggle pull-right visible-xs"><i class="fa fa-comments"></i></a>-->
+          <a class="navbar-brand navbar-brand-primary hidden-xs" href="" ng-click="newsfeed()" style="width:200px;">CollabMedi</a>
+        </div>
+        <div class="collapse navbar-collapse" collapse="navCollapsed">
+
+          <ul class="nav navbar-nav navbar-user">
+            <!-- User -->
+            <li class="dropdown">
+              <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                <img ng-src="{{newsfeed.pic_50}}" width="35" alt="Bill" class="img-circle" /> {{newsfeed.fname}} <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="" ng-click="userprofile(newsfeed.emailid)">Profile</a></li>
+                <li><a href="" ng-click="messages()">Messages</a></li>
+                <li><a href="" ng-click="logout()">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <form class="navbar-form margin-none navbar-left hidden-xs ">
+            <!-- Search -->
+            <div class="search-1">
+                <div class="input-group">
+                  <angucomplete-alt id="ex6" placeholder="Search" pause="100" selected-object="selectedItem" local-data="searchAll" search-fields="name,type" title-field="name" description-field="type" minlength="1" input-class="form-control form-control-small">
+                  </angucomplete-alt>
+                </div>
+                <a href="" ng-click="redirectProfile(selectedItem.originalObject)" class="btn btn-primary"><i class="icon-search"></i></a>
+                <!--<input type="text" ng-model="searchText" class="form-control" placeholder="Search">
+                <div custom-select="t as t.name for t in filteredText">
+                  <div class="pull-left">
+                    <strong>{{ t.name }}</strong><br />
+                    <span>t.type</span>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>-->
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar component with st-effect-1 (set on the toggle button within the navbar) -->
+    <div class="sidebar left sidebar-size-2 sidebar-offset-0 sidebar-visible-desktop sidebar-visible-mobile sidebar-skin-dark" id="sidebar-menu" collapse="menuCollapsed">
+      <div data-scrollable>
+        <ul class="sidebar-menu">
+          <li class=""><a href="" ng-click="timeline()"><i class="icon-ship-wheel"></i> <span>Timeline</span></a></li>
+          <li class=""><a href="" ng-click="userprofile(newsfeed.emailid)"><i class="icon-user-1"></i> <span>Profile</span></a></li>
+          <li class=""><a href="" ng-click="connections()"><i class="fa fa-group"></i> <span>Friends</span></a></li>
+          <li class=""><a href="" ng-click="messages()"><i class="icon-comment-fill-1"></i> <span>Messages</span></a></li>
+          <li class=""><a href="" ng-click="allgroups()"><i class="icon-group"></i> <span>Groups</span></a></li>
+          <li class=""><a href="" ng-click="allblogs()"><i class="fa fa-file-text"></i> <span>Blogs</span></a></li>
+          <li class="" ng-if="currentUserType == 'Doctor'"><a href="" ng-click="recommendDoc()"><i class="icon-stethoscope"></i> <span>Disease Predictor</span></a></li>
+          <li class="" ng-if="currentUserType == 'Pharmacist'"><a href="" ng-click="recommendPharma()"><i class="icon-pill"></i> <span>Cheap Medicine</span></a></li>
+          <li class=""><a href="" ng-click="logout()"><i class="icon-lock-fill"></i> <span>Logout</span></a></li>
+        </ul>
+        <h4 class="category border top" ng-if="trends.length">Trends</h4>
+        <div class="sidebar-block">
+          <ul class="sidebar-feed">
+            <li class="media" ng-repeat="trend in trends">
+              <div class="media-left">
+                <span class="media-object">
+                            <i class="fa fa-fw fa-line-chart"></i>
+                        </span>
+              </div>
+              <div class="media-body">
+                {{trend.text}}
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- sidebar effects OUTSIDE of st-pusher: -->
+    <!-- st-effect-1, st-effect-2, st-effect-4, st-effect-5, st-effect-9, st-effect-10, st-effect-11, st-effect-12, st-effect-13 -->
+
+    <!-- content push wrapper -->
+    <div class="st-pusher" id="content">
+
+      <!-- sidebar effects INSIDE of st-pusher: -->
+      <!-- st-effect-3, st-effect-6, st-effect-7, st-effect-8, st-effect-14 -->
+
+      <!-- this is the wrapper for the content -->
+      <div class="st-content">
+
+        <!-- extra div for emulating position:fixed of the menu -->
+        <div class="st-content-inner">
+
+          <div class="container-fluid" id="newsFeedTimeline">
+
+            <div class="cover profile">
+              <div class="wrapper">
+                <div class="image">
+                  <img src="images/profile-cover.jpg" alt="people" />
+                </div>
+              </div>
+              <div class="cover-info">
+                <div class="avatar">
+                  <img ng-src="{{newsfeed.pic}}" alt="people" />
+                </div>
+                <div class="name"><h1 style="color: #FFFFFF;">{{newsfeed.fname}}</h1></div>
+                <ul class="cover-nav">
+                  <li><a href="" ng-click="timeline()"><i class="fa fa-fw icon-ship-wheel"></i> Timeline</a></li>
+                  <li><a href="" ng-click="userprofile(newsfeed.emailid)"><i class="fa fa-fw icon-user-1"></i> About</a></li>
+                  <li><a href="" ng-click="connections()"><i class="fa fa-fw fa-users"></i> Friends</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="row" id="feedRow">
+              <div class="col-md-9">
+                <ul class="timeline-list">
+                  <li class="media media-clearfix-xs">
+                    <div class="media-left">
+                      <div class="user-wrapper">
+                        <div class="date">{{newsfeed.today_date | date: 'dd MMMM, yyyy'}}</div>
+                      </div>
+                    </div>
+                    <div class="media-body">
+                      <div class="media-body-wrapper">
+                        <div class="row" style="margin-left:0px !important;">
+                          <div class="col-md-10 col-lg-8">
+                            <div class="panel panel-default share clearfix-xs">
+                              <div class="panel-heading panel-heading-gray title">
+                                What&acute;s new
+                              </div>
+                              <div class="panel-body">
+                                <textarea name="status" ng-model="post.status" class="form-control share-text" rows="3" placeholder="Share your status..."></textarea>
+                              </div>
+                              <div class="panel-footer share-buttons">
+                                <button type="submit" class="btn btn-primary btn-xs" href="" ng-click="addUserPost()">Post</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="media media-clearfix-xs" ng-repeat="post in posts">
+                    <div class="media-left">
+                      <div class="user-wrapper">
+                        <img ng-src="{{newsfeed.pic}}" alt="people" class="img-circle" width="80" />
+                        <div class="date">{{post.date | date: 'dd MMMM, yyyy'}}</div>
+                      </div>
+                    </div>
+                    <div class="media-body">
+                      <div class="media-body-wrapper">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <div class="media">
+                              <div class="media-body">
+                                <span style="font-size: 14px; font-weight: bold;">{{post.posted_by}}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="panel-body">
+                            <p>{{post.content}}</p>
+                          </div>
+                          <ul class="comments">
+                            <li class="media" ng-repeat="postComment in post.comments">
+                              <div class="media-left">
+                                <a href="">
+                                  <img ng-src="{{newsfeed.pic_50}}" class="media-object">
+                                </a>
+                              </div>
+                              <div class="media-body">
+                                <a href="" class="comment-author pull-left">{{postComment.commented_by}}</a>
+                                <span>{{postComment.content}}</span>
+                                <div class="comment-date">{{postComment.date | date: 'dd MMMM, yyyy'}}</div>
+                              </div>
+                            </li>
+                            <li class="comment-form">
+                              <form name="commentForm" novalidate>
+                                <div class="input-group">
+                                  <input type="text" name="commentContent" class="form-control" ng-model="postComment.myComment" required/>
+                                  <span class="input-group-btn">
+                                    <a href="" ng-click="addPostComment(post.id, postComment.myComment)" ng-disabled="commentForm.commentContent.$invalid" class="btn btn-default"><i class="fa fa-comments"></i></a>
+                                  </span>
+                                </div>
+                              </form>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /st-content-inner -->
+      </div>
+      <!-- /st-content -->
+    </div>
+    <!-- /st-pusher -->
+
+    <!-- Footer -->
+    <footer class="footer">
+      <strong>CollabMedi</strong> v1.0 &copy; Copyright 2016
+    </footer>
+    <!-- // Footer -->
+
+  </div>
+  <!-- /st-container -->
+
+  <!-- Inline Script for colors and config objects; used by various external scripts; -->
+  <script>
+    var colors = {
+      "danger-color": "#e74c3c",
+      "success-color": "#81b53e",
+      "warning-color": "#f0ad4e",
+      "inverse-color": "#2c3e50",
+      "info-color": "#2d7cb5",
+      "default-color": "#6e7882",
+      "default-light-color": "#cfd9db",
+      "purple-color": "#9D8AC7",
+      "mustard-color": "#d4d171",
+      "lightred-color": "#e15258",
+      "body-bg": "#f6f6f6"
+    };
+    var config = {
+      theme: "social-1",
+      skins: {
+        "default": {
+          "primary-color": "#16ae9f"
+        },
+        "orange": {
+          "primary-color": "#e74c3c"
+        },
+        "blue": {
+          "primary-color": "#4687ce"
+        },
+        "purple": {
+          "primary-color": "#af86b9"
+        },
+        "brown": {
+          "primary-color": "#c3a961"
+        }
+      }
+    };
+  </script>
+
+  <script src="js/vendor/all.js"></script>
+  <script src="js/app/app1.js"></script>
+</body>
+
+</html>

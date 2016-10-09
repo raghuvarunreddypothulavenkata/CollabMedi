@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="st-layout ls-top-navbar ls-bottom-footer show-sidebar sidebar-l2" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>CollabMedi | Disease Predictor</title>
+    <link href="css/vendor/all.css" rel="stylesheet">
+    <link href="css/app/app.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+  WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!-- If you don't need support for Internet Explorer <= 8 you can safely remove these -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<!-- Wrapper required for sidebar transitions -->
+<div class="st-container">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-main navbar-default navbar-fixed-top" ng-if="currentUserEmailID != undefined" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="navbar-header">
+                    <a ng-click="menuCollapsed = !menuCollapsed" href="" data-effect="st-effect-1" class="toggle pull-left visible-xs"><i class="fa fa-bars"></i></a>
+                    <button type="button" class="navbar-toggle" ng-click="navCollapsed = !navCollapsed">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <!--<a ng-click="chatCollapsed = !chatCollapsed" href="" data-effect="st-effect-1" class="toggle pull-right visible-xs"><i class="fa fa-comments"></i></a>-->
+                    <a class="navbar-brand navbar-brand-primary hidden-xs" href="" ng-click="newsfeed()" style="width:200px;">CollabMedi</a>
+                </div>
+            </div>
+            <div class="collapse navbar-collapse" collapse="navCollapsed">
+
+                <ul class="nav navbar-nav navbar-user">
+                    <!-- User -->
+                    <li class="dropdown">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            <img ng-src="{{newsfeed.pic_50}}" width="35" alt="Bill" class="img-circle" /> {{newsfeed.fname}} <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="" ng-click="userprofile(newsfeed.emailid)">Profile</a></li>
+                            <li><a href="" ng-click="messages()">Messages</a></li>
+                            <li><a href="" ng-click="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <form class="navbar-form margin-none navbar-left hidden-xs ">
+                    <!-- Search -->
+                    <div class="search-1">
+                        <div class="input-group">
+                            <angucomplete-alt id="ex6" placeholder="Search" pause="100" selected-object="selectedItem" local-data="searchAll" search-fields="name,type" title-field="name" description-field="type" minlength="1" input-class="form-control form-control-small">
+                            </angucomplete-alt>
+                        </div>
+                        <a href="" ng-click="redirectProfile(selectedItem.originalObject)" class="btn btn-primary"><i class="icon-search"></i></a>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar component with st-effect-1 (set on the toggle button within the navbar) -->
+    <div ng-if="currentUserEmailID != undefined" class="sidebar left sidebar-size-2 sidebar-offset-0 sidebar-visible-desktop sidebar-visible-mobile sidebar-skin-dark" id="sidebar-menu" collapse="menuCollapsed">
+        <div data-scrollable>
+            <ul class="sidebar-menu">
+                <li class=""><a href="" ng-click="newsfeed()"><i class="fa fa-newspaper-o"></i> <span>Newsfeed</span></a></li>
+                <li class=""><a href="" ng-click="userprofile(newsfeed.emailid)"><i class="icon-user-1"></i> <span>Profile</span></a></li>
+                <li class=""><a href="" ng-click="connections()"><i class="fa fa-group"></i> <span>Friends</span></a></li>
+                <li class=""><a href="" ng-click="messages()"><i class="icon-comment-fill-1"></i> <span>Messages</span></a></li>
+                <li class=""><a href="" ng-click="allgroups()"><i class="icon-group"></i> <span>Groups</span></a></li>
+                <li class=""><a href="" ng-click="allblogs()"><i class="fa fa-file-text"></i> <span>Blogs</span></a></li>
+                <li class="" ng-if="currentUserType == 'Doctor'"><a href="" ng-click="recommendDoc()"><i class="icon-stethoscope"></i> <span>Disease Predictor</span></a></li>
+                <li class="" ng-if="currentUserType == 'Pharmacist'"><a href="" ng-click="recommendPharma()"><i class="icon-pill"></i> <span>Cheap Medicine</span></a></li>
+                <li><a href="" ng-click="logout()"><i class="icon-unlock-fill"></i> <span>Logout</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- sidebar effects OUTSIDE of st-pusher: -->
+    <!-- st-effect-1, st-effect-2, st-effect-4, st-effect-5, st-effect-9, st-effect-10, st-effect-11, st-effect-12, st-effect-13 -->
+
+    <!-- content push wrapper -->
+    <div class="st-pusher" id="content">
+
+        <!-- sidebar effects INSIDE of st-pusher: -->
+        <!-- st-effect-3, st-effect-6, st-effect-7, st-effect-8, st-effect-14 -->
+
+        <!-- this is the wrapper for the content -->
+        <div class="st-content">
+
+            <!-- extra div for emulating position:fixed of the menu -->
+            <div class="st-content-inner">
+
+                <div class="container-fluid">
+                    <div class="row" id="usersRow">
+                        <h2 class="page-section-heading">Disease Predictor</h2>
+                        <br>
+                        <span>Please select the symptoms of the disease you are looking for!</span>
+                        <br>
+                        <div style="position: relative; height: 35px; margin-top: 0; margin-left: auto; margin-right: auto; float: left;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td style="width:55%">
+                                                <div class="form-group form-control-default required">
+                                                    <input type="text" ng-model="search" class="form-control" placeholder="Symptom">
+                                                </div>
+                                            </td>
+                                            <td style="width:45%">
+                                                <a style="margin-top: -15px;" href="" class="btn btn-primary" ng-click="findDiseases()">Check</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!-- search tech lead result -->
+                                    <div style="max-height: 250px;
+                                             width: 53%;
+                                             overflow-y: auto;
+                                             z-index: 10;
+                                             position: absolute;
+                                             background-color: white;
+                                             font-weight: 500;
+                                             top:100%;
+                                             margin-top: -18px;
+                                             border-radius: 4px;"
+                                         ng-if="filteredSymptoms.length > 0">
+                                        <ul style=" list-style: none;
+                                            font-size: 1.15rem;
+                                            padding-left: 0;
+                                            padding-right: 0;" class="container-fluid text-left">
+                                            <li style="padding: 5px 15px;" ng-repeat="u in filteredSymptoms | limitTo :5"
+                                                class="search-result-item"
+                                                ng-click="selectSymptom(u)">
+                                                <span>{{u}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="col-sm-12" style="width: 400px;">
+                                <div style="height: 30px;color: #ebebeb;background-color: #26a69a;display: flex;align-items: center;padding-left: 5px;padding-right: 5px;border-radius: 2px;margin-bottom: 5px;
+                                margin-right: 5px;float: left;" class="selection-list selection-list-lead-edit exist-lead-{{lead.uid}}"
+                                     ng-repeat="s in selectedSymptoms">
+                                    <span class="person-name" ng-click="removeS($index)">{{s}}</span>
+                                    <span style="padding-left: 4px"> x</span>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="col-sm-12">
+                            <span ng-if="isTen" style="color:darkred">{{syMsg}}</span>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <br><br><br><br>
+                            <br><br><br><br>
+
+                            <span><b style="color: darkred">Note :</b> The below diseases for the symptoms checked are
+                                just predictions, patient needs to checked thoroughly before going ahead with the
+                                treatment
+                            </span>
+                            <br>
+                            <table class="table table-striped" style="border: 1px; width: 100%;" ng-if="diseases.length>0">
+                                <tr>
+                                    <td style="font-size: 1.15rem;align-content: center"><b>Disease</b></td>
+                                    <td style="font-size: 1.15rem;align-content: center"><b>Symptoms</b></td>
+                                </tr>
+                                <tr ng-repeat="d in diseases | limitTo: 10">
+                                    <td style="font-size: 1.15rem;">{{d.disease}}</td>
+                                    <td style="font-size: 1.15rem;">
+                                        <ul>
+                                            <li ng-repeat="s in d.symptoms">{{s}}</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /st-content-inner -->
+
+        </div>
+        <!-- /st-content -->
+
+    </div>
+    <!-- /st-pusher -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <strong>CollabMedi</strong> v1.0 &copy; Copyright 2016
+    </footer>
+    <!-- // Footer -->
+
+</div>
+<!-- /st-container -->
+
+<!-- Inline Script for colors and config objects; used by various external scripts; -->
+<script>
+    var colors = {
+        "danger-color": "#e74c3c",
+        "success-color": "#81b53e",
+        "warning-color": "#f0ad4e",
+        "inverse-color": "#2c3e50",
+        "info-color": "#2d7cb5",
+        "default-color": "#6e7882",
+        "default-light-color": "#cfd9db",
+        "purple-color": "#9D8AC7",
+        "mustard-color": "#d4d171",
+        "lightred-color": "#e15258",
+        "body-bg": "#f6f6f6"
+    };
+    var config = {
+        theme: "social-1",
+        skins: {
+            "default": {
+                "primary-color": "#16ae9f"
+            },
+            "orange": {
+                "primary-color": "#e74c3c"
+            },
+            "blue": {
+                "primary-color": "#4687ce"
+            },
+            "purple": {
+                "primary-color": "#af86b9"
+            },
+            "brown": {
+                "primary-color": "#c3a961"
+            }
+        }
+    };
+</script>
+
+<script src="js/vendor/all.js"></script>
+<script src="js/app/app1.js"></script>
+
+</body>
+
+</html>

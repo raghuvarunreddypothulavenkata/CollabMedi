@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html class="hide-sidebar ls-bottom-footer" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>CollabMedi | Registration</title>
+    <link href="css/vendor/all.css" rel="stylesheet">
+    <link href="css/app/app.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+  WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!-- If you don't need support for Internet Explorer <= 8 you can safely remove these -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+</head>
+
+<body>
+<!--<video controls autoplay loop poster="videos/150987380.jpg" id="bgvid">
+    <source src="videos/150987380.mp4" type="video/mp4">
+    <source src="videos/150987380.ogg" type="video/ogg">
+</video>-->
+<div class="registration">
+    <div id="content">
+        <div class="container-fluid">
+            <div class="lock-container">
+                <h1>New Registration</h1>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form name="ngForm" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="radio radio-info radio-inline">
+                                        <input type="radio" id="isDoctor" value="Doctor" name="radioInline" ng-model="user.userType" checked="" required>
+                                        <label for="isDoctor">Doctor</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="radio radio-info radio-inline">
+                                        <input type="radio" id="isPharmacist" value="Pharmacist" name="radioInline" ng-model="user.userType" required>
+                                        <label for="isPharmacist">Pharmacist</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-control-default required">
+                                        <label for="inputFirstName">First name</label>
+                                        <input type="text" ng-model="user.firstName" name="firstName" class="form-control" id="inputFirstName" placeholder="Your first name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-control-default required">
+                                        <label for="inputLastName">Last name</label>
+                                        <input type="text" ng-model="user.lastName" name="lastName" class="form-control" id="inputLastName" placeholder="Your last name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-control-default">
+                                <label for="inputDoctorID">Doctor ID</label>
+                                <input type="text" ng-model="user.doctorID" class="form-control" id="inputDoctorID" placeholder="Enter doctor ID">
+                            </div>
+                            <div class="form-group form-control-default">
+                                <label for="inputPhoneNo">Phone Number</label>
+                                <input type="tel" ng-model="user.phoneNo" class="form-control" id="inputPhoneNo" placeholder="Enter phone no">
+                            </div>
+                            <div class="form-group form-control-default required">
+                                <label for="inputEmail">Email address</label>
+                                <input type="email" ng-model="user.emailID" name="emailId" class="form-control" id="inputEmail" placeholder="Enter email" required>
+                            </div>
+                            <div class="form-group form-control-default required">
+                                <label for="inputPassword">Password</label>
+                                <input type="password" ng-model="user.password" name="passWord" class="form-control" id="inputPassword" placeholder="Enter password" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <table style="width:100%" class="table">
+                                        <tr>
+                                            <td style="width: 50%">
+                                                <button ng-click="addUser()" type="submit" class="btn btn-primary" ng-disabled="ngForm.$invalid">Register</button>
+                                            </td>
+                                            <td style="width: 50%">
+                                                <a href="" class="btn btn-primary" ng-click="allblogs()">View Blogs</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="error-message" ng-show="ngForm.radioInline.$invalid && !ngForm.radioInline.$pristine" style="color:red">Please select either Doctor or Pharmacist</span><br />
+                                    <span class="error-message" ng-show="(ngForm.firstName.$invalid && !ngForm.firstName.$pristine) || (ngForm.lastName.$invalid && !ngForm.lastName.$pristine)" style="color:red">Please enter your full name</span><br />
+                                    <span class="error-message" ng-show="ngForm.emailId.$invalid && !ngForm.emailId.$pristine" style="color:red">Please enter valid email address</span><br />
+                                    <span class="error-message" ng-show="ngForm.passWord.$invalid && !ngForm.passWord.$pristine" style="color:red">Please enter a password</span>
+                                </div>
+                            </div>
+                        </form>
+                        <h4 style="color:red">
+                            {{err_message}}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <strong>CollabMedi</strong> v1.0 &copy; Copyright 2016
+    </footer>
+    <!-- // Footer -->
+
+</div>
+
+<!-- Inline Script for colors and config objects; used by various external scripts; -->
+<script>
+    var colors = {
+        "danger-color": "#e74c3c",
+        "success-color": "#81b53e",
+        "warning-color": "#f0ad4e",
+        "inverse-color": "#2c3e50",
+        "info-color": "#2d7cb5",
+        "default-color": "#6e7882",
+        "default-light-color": "#cfd9db",
+        "purple-color": "#9D8AC7",
+        "mustard-color": "#d4d171",
+        "lightred-color": "#e15258",
+        "body-bg": "#f6f6f6"
+    };
+    var config = {
+        theme: "social-1",
+        skins: {
+            "default": {
+                "primary-color": "#16ae9f"
+            },
+            "orange": {
+                "primary-color": "#e74c3c"
+            },
+            "blue": {
+                "primary-color": "#4687ce"
+            },
+            "purple": {
+                "primary-color": "#af86b9"
+            },
+            "brown": {
+                "primary-color": "#c3a961"
+            }
+        }
+    };
+</script>
+
+<script src="js/vendor/all.js"></script>
+<script src="js/app/app1.js"></script>
+</body>
+
+</html>

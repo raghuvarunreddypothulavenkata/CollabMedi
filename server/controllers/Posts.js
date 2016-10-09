@@ -14,12 +14,12 @@ module.exports.create = function (req, res) {
     id: new ObjectId(),
     content: req.body.content,
     type: req.body.type,
-    date: new Date().getTime()
+    date: new Date().getTime(),
+    posted_by: req.body.posted_by
   }
   Users.findById(userid, function (err, resp) {
     resp.posts.push(post);
     Users.findByIdAndUpdate(userid, resp, function (err, docs) {
-      console.log(docs)
       res.status(204).send();
     })
   });
@@ -63,28 +63,32 @@ module.exports.getAll = function (req, res) {
 
   Users.findById(userId, function (err, resp) {
 
-    var temp = resp.connections;
-    var connections = [];
-    var posts = [];
+    if(resp.connections==undefined){
+      res.status(200).json([]);
+    }else{
+      var temp = resp.connections;
 
-    if (_.isEmpty(temp)) {
-      res.status(200).json(posts);
-    } else {
-      _.each(temp, function (connection) {
-        connections.push({_id: connection});
-      })
-      Users.find({$or: connections}, function (err, users) {
-        _.each(users, function (user) {
-          _.each(user.posts, function (post) {
-            posts.push(post)
-          })
+      var connections = [];
+      var posts = [];
 
-        });
-        posts.reverse();
+      if (_.isEmpty(temp)) {
         res.status(200).json(posts);
+      } else {
+        _.each(temp, function (connection) {
+          connections.push({_id: connection});
+        })
+        Users.find({$or: connections}, function (err, users) {
+          _.each(users, function (user) {
+            _.each(user.posts, function (post) {
+              posts.push(post)
+            })
 
-      });
+          });
+          posts.reverse();
+          res.status(200).json(posts);
+        });
+      }
+   }
 
-    }
   });
 }
