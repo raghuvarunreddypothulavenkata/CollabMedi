@@ -1,0 +1,8 @@
+{
+  "listening_port": {
+    "localhost": 3000
+  },
+  "domain": {
+    "url": "http://localhost:3000/rest"
+  }
+}
